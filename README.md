@@ -1,2 +1,3 @@
 # SSM-OBS
-OBservation Driven State Space Models
+Observation Driven State Space Models
+Makodo paper for presentationat ISF2017.
