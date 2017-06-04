@@ -1,0 +1,67 @@
+Title       : Time Series Forecasting
+Sub Title   : Observation-Driven State Space Approach
+Author      : Nalph D Snyder 
+Affiliation : Monash Business School, Clayton, Victoria 3800, Australia
+Email       : ralph.snyder@monash.edu
+Title Note  : &date; (version 1.1)
+Bibliography: sample.bib
+Csl Style   : madoko-natural
+Cite Style  : natural
+
+
+~ Abstract
+	An approach to time series forecasting is proposed where one-step ahead prediction distributions are 
+  specified directly rather than  derived from explicit time series models. Distinctive features of the 
+  approach are its flexibility: the one-step ahead prediction distributions can be Gaussian or non-Gaussian; 
+  and their time dependent parameters can be linear or non-linear functions of past observations. 
+  Associated maximum likelihood estimates of the time invariant parameters can be obtained with quite low computational
+  loads compared with conventional alternatives such as particle filters. Prediction distributions must be 
+  simulated from the out-of-sample one-step ahead prediction distributions. The approach is illustrated 
+  applying simple exponential smoothing with a Poisson distribution to a low counts time series. 
+~
+# Introduction
+Standard approaches to time series forecasting often involve the specification of a state space model and the 
+derivation of associated one-step ahead prediction distributions for likelihood evaluation. 
+In the case of multi-disturbance Gaussian linear state space models, this is done using a Kalman filter or 
+some suitable variant for non-stationary time series. Outside the Gaussian and linearity assumptions, 
+matters become much more complex and recourse must be made to computationally intensive methods like particle 
+filters  [@carpenter1999improved]
+
+An exception is the class of innovations state space models [@ord1997] where estimation can be achieved with 
+appropriate  linear and non-linear forms of exponential smoothing; and where the innovations can possess
+ non-Gaussian distributions. This approach provides the backdrop for the now widely used ETS forecasting
+  system [@hyndman2002;@hyndman2008]. Some applications such as forecasting count time series, however,
+   do not lend themselves to the use of innovations [@snyder2012]. 
+
+My aim in this paper is to build on ideas implicit in [@snyder2012] to produce a general approach to time series forecasting that is much more tractable than standard approaches. The key change is to side-step the problems associated with the derivation of one-step ahead prediction distributions by 
+
+	* _not_ directly specifying a time series model
+	* _defining_, rather than _deriving_, the one-step ahead prediction distributions.
+This paper is arranged as follows:
+
+	1. Define the general concept of a one-step ahead prediction distribution and its use in likelihood evaluation.
+	2. Consider how to generate prediction distributions using one-step ahead prediction distributions in future periods.
+	3. Provide an illustration using simple exponential smoothing in conjunction with a Poisson distribution.
+	4. Conclude with an evaluation of the proposed approach and its possibilities
+
+# Likelihood Evaluation
+A sample $y_1,y_2,\ldots,y_n$ of consecutive series values is assumed. In the conventional approach, a model $\text{M}(y_t,\vartheta)$ is specified where $y_t$ is the random series value in period $t$ and $\vartheta$ is a time-invariant vector of unknown parameters. The problem is to evaluate the likelihood function for a trial value of $\vartheta$. To this end, a succession of one-step ahead prediction distributions, shown in Table \ref{table:1-step}, are derived. Then Bayes theorem is invoked to demonstrate that their product is the joint density (mass) function $p(y_1,y_2,\ldots,y_n;\vartheta)$. The likelihood is therefore evaluated, for a given value of the parameter vector $\vartheta$, by plugging in the observed values of the series into the one-step ahead density (mass) functions and finding their product.
+
+~TableFigure {#tab-oneStep;\
+  caption:  "Table of one-step ahead prediction density (mass) functions";}
+|----------------------------------|
+| $p(y_1;\vartheta)$               |
+| $p(y_2 \mid y_1;\vartheta)$      |
+| $p(y_3\mid y_{1:2};\vartheta)$   |
+| $\cdots$                         |
+| $p(y_n \mid y_{1:n-1};\vartheta)$|
+|----------------------------------|
+{ .booktable}               
+~
+
+In conventional approaches the method used to derive the distributions in Table \ref{table:1-step} depends on the context. 
+*item Stationary time series; Gaussian linear multi-disturbance state space model
+	It is assumed that the process has operated from the infinite past and the seed distribution $p(y_1;\vartheta)$ corresponds to its stationary distribution. Moments of subsequent one-step ahead prediction distributions are obtained with the Kalman filter. 
+
+
+
